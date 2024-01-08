@@ -1,0 +1,19 @@
+hitchhikers:
+    type: Book
+    title: The Hitchhiker's Guide to the Galaxy
+    author: Adams, Douglas
+    volume: 1
+    date: 1979-10-12
+    isbn: "0-330-25864-8"
+    publisher: Pan Books
+    edition: 1
+
+electronics:
+  type: Book
+  title: The Art of Electronics
+  edition: 3
+  date: 2015
+  page-count: 1125
+  publisher: Cambridge University Press
+  location: Cambridge, England
+  author: ["Horowitz, Hall", "Hill, Winfield"]
