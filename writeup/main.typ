@@ -1,15 +1,15 @@
 #import "aiaa_template.typ": *
 
 #show: aiaa_template.with(
-  title: "Efficiency Optimization of Numerical Methods for Approximating Second Order Ordinary Differential Equations.",
+  title: "Efficiency Evaluation of Numerical Methods for Approximating Second Order Ordinary Differential Equations.",
   authors: (
     (
-      name: "Pera Kasemsripitak",
-      affiliation: "NIST International School, Bangkok, 10110, Thailand",
-      job: "Student, International Baccalaureate Diploma."
+      name: "JQX051",
+      affiliation: "Higher Level Mathematics Analysis and Approaches",
+      job: ""
     ),
   ),
-  abstract: [#lorem(45)]
+  abstract: []
 )
 
 // We generated the example code below so you can see how
@@ -34,7 +34,7 @@ $ (dif x)/(dif t) &= v \
 
 The samples will consider the initial conditions $omega = sqrt(10)$, $x_0 = 1$, $v_0 = 0$, and $h = 0.01$ where $omega$ is the angular frequency of the system, $x_0$ is the initial displacement of the mass from equilibrium, $v_0$ is the initial velocity of the mass, and $h$ is the iterative step size.
 
-#pagebreak()
+#linebreak()
 
 == Runge-Kutta Midpoint (RK2) Method 
 
@@ -139,7 +139,6 @@ $
 
 Although this method only involves 2 fundamental calculations per iteration, there is no definite number of operations involved due to the numerical solving step which involves external libraries and its dependency on the complexity of the equations themselves. 
 
-#pagebreak()
 
 = Complexity Optimization
 
@@ -156,55 +155,64 @@ and the Van der Pol oscillator equation,
 
 $ (dif^2 x)/(dif t^2) - mu(1-x^2)(dif x)/(dif t) + x = 0. $
 
-The following data 
+- present data (complete)
+- unfortunately, I am still figuring out how to attach media properly to this PDF. I will attach stuff separately to classroom so you can get an idea of what i'm working with. 
+- backward euler is extremely sluggish (due to numeric sys. eq. solving)
+- two other methods are faster for some eq. than others
+- rk2 fastest overall
+
+- present averages + bar graph comparison
+- avg overall time for each method
+
 
 = Accuracy Optimization
 
+- for SHM and damped equations: plot against analytical solution
+- plot absolute error 
+- global error analysis: RMSE
+
+- analyse accuracy via convergence rate: 
+- run method w different stepsizes (magnitudes of 2)
+- calculate rmse of each step size
+- analyze error reductiona nd calc convergence rate (convergence rate formula)
+
+$ p approx (log (E(h_1)/E(h_2)))/log(h_1/h_2) $
+
+compare convergence rate across methods
+higher order methods = higher efficiency
+
+results: 
+- for SHM, only RK2 converges, while the other methods increase in abs. in an increasing oscillating pattern for every iteration
+- for damped, all solutions converge. RK2 still converges the fastest, but P-C and Reverse Euler vary between test cases.
+
+- visual comparison of graphs (global)
+
 = Evaluation
 
-== Second Subheading
-#lorem(10) Inline equation $p = 1/2 rho v^2$ followed by separate equation @eq1. 
-$ sqrt(a^2 + b^2) = c $<eq1>
+RK2 is the best overall
 
-=== Example Figures and Tables
-Here's an example figure, @fig1:
-#figure(caption: "This is the caption of the figure.",box(fill: luma(200), height: 1in + 1em, inset: 0.5in)[This is the content of the figure]) <fig1>
+Reverse Euler is lowest performing
 
-Likewise, here's an example table, @table1:
-#figure(caption: "Here's an example table.", table(
-  columns: (0.5fr, 0.25fr, 0.25fr),
-  inset: 10pt,
-  align: horizon,
-  [], [*Area*], [*Parameters*],
-  "Cylinder",
-  $ pi h (D^2 - d^2) / 4 $,
-  [
-    $h$: height \
-    $D$: outer radius \
-    $d$: inner radius
-  ],
-  "Tetrahedron",
-  $ sqrt(2) / 12 a^3 $,
-  [$a$: edge length]
-))<table1>
+P-C is quite accurate across the board and can be used for stiffer equations
 
-Finally, some concluding text under the table.
+Defining Efficiency: accuracy/time -> comparison of this figure leads to RK2 being the most efficient. 
 
-=== Tertiary Heading Level
-#lorem(15)
-=== Continuing Tertiary Heading
-- List of items
-- List of items, item 2
-- Etc.
+Important consideration + extension:
+Reverse euler is much more stable, so it performs well with larger step sizes. This was not changed as it was a control, but it greatly affects its performance as its runtime is comparable to that of the other methods at large step sizes of up to h=3, which is 100x more than the tested size. This does not work for the other two methods.
 
-== Big 2
-#lorem(25)
+- this may be considered and explored for the final submission, if advised.
 
-#lorem(25)
+Extension: Test step sizes for full optimization.
 
-= Related Work
-#lorem(50)
+Note: "optimization" is better done within method classes themselves. This exploration only covers and outlines the differences between each method class. Focusing on optimizing one solution/method will allow for proper modeling of step size vs. time vs. convergence rate for full optimization. "optimization" in this case is more like "evaluation", which was an oversight when this exploration was planned: method types cannot be quantified for proper optimization.  
 
-#lorem(50)
+Thus, the paper title may be changed to match that: Efficiency Evaluation...
+
+note to Examiner: All the data has been collected, and all of the code and graphs have been generated. I will work to add all of these results for the final submission. 
+
+See the full source code at https://github.com/perakasem/hlaa-ia
+
+- contains code for each numerical method: will be added to appendix for final submission. 
+
 
 #bibliography(full: true, "bib.yml")

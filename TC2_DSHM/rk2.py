@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 
 def f(t, y, v, b, k):
     return -b * v - k * y
@@ -61,7 +60,6 @@ y = y0
 v = v0
 
 # RK2 Midpoint Method
-start_time = time.time()
 for t in t_values:
     y, v = rk_midpoint_step(t, y, v, h, b, k)
     y_values.append(y)
@@ -70,8 +68,6 @@ for t in t_values:
     y_analytical = analytical_solution(t, y0, v0, b, k)
     analytical_values.append(y_analytical)
     errors.append(abs(y - y_analytical))
-
-print("--- %s seconds ---" % (time.time() - start_time))
 
 # Calculate RMSE
 rmse = np.sqrt(np.mean(np.array(errors)**2))

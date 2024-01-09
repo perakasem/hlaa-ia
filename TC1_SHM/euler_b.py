@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 from scipy.optimize import fsolve
 
 def f(t, y, omega):
@@ -40,7 +39,6 @@ y = y0
 v = v0
 
 # Backward Euler Method
-start_time = time.time()
 for t in t_values:
     y, v = backward_euler_step(t, y, v, h, omega)
     y_values.append(y)
@@ -49,8 +47,6 @@ for t in t_values:
     y_analytical = analytical_solution(t, y0, v0, omega)
     analytical_values.append(y_analytical)
     errors.append(abs(y - y_analytical))
-
-print("--- %s seconds ---" % (time.time() - start_time))
 
 # Calculate RMSE
 rmse = np.sqrt(np.mean(np.array(errors)**2))

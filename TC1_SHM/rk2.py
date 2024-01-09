@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 
 def f(t, y, omega):
     return -omega**2 * y
@@ -11,7 +10,7 @@ def rk_midpoint_step(t, y, v, h, omega):
     midpoint_v = v + 0.5 * h * k1_v
     midpoint_y = y + 0.5 * h * k1_y
     k2_v = f(t + 0.5 * h, midpoint_y, omega)
-    k2_y = midpot_v
+    k2_y = midpoint_v
     y_next = y + h * k2_y
     v_next = v + h * k2_v
     return y_next, v_next
@@ -38,7 +37,6 @@ errors = []
 y = y0
 v = v0
 
-start_time = time.time()
 for t in t_values:
     y, v = rk_midpoint_step(t, y, v, h, omega)
     y_values.append(y)
@@ -46,8 +44,6 @@ for t in t_values:
     y_analytical = analytical_solution(t, y0, v0, omega)
     analytical_values.append(y_analytical)
     errors.append(abs(y - y_analytical))
-
-print("--- %s seconds ---" % (time.time() - start_time))
 
 rmse = np.sqrt(np.mean(np.array(errors)**2))
 print("RMSE:", rmse)

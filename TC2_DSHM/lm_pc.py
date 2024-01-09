@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 
 def f(t, y, v, b, k):
     return -b * v - k * y
@@ -19,8 +18,6 @@ def predictor_corrector_step(t, y, v, v_prev, h, b, k):
     y_correct = y + 0.5 * h * (v + v_correct)
 
     return y_correct, v_correct, v_predict
-
-
 
 def analytical_solution(t, y0, v0, b, k):
     discriminant = b**2 - 4*k
@@ -62,8 +59,6 @@ errors = []
 y = y0
 v = v0
 
-# Predictor-Corrector Method
-start_time = time.time()
 # Main loop
 v_prev = None
 for t in t_values:
@@ -76,8 +71,6 @@ for t in t_values:
     y_analytical = analytical_solution(t, y0, v0, b, k)
     analytical_values.append(y_analytical)
     errors.append(abs(y - y_analytical))
-
-print("--- %s seconds ---" % (time.time() - start_time))
 
 # Calculate RMSE
 rmse = np.sqrt(np.mean(np.array(errors)**2))
