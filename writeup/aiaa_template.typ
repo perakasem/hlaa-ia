@@ -47,8 +47,8 @@
   show math.equation: set text(weight: 400)
 
   // Single line spacing + indent
-  show par: set block(spacing: 0.65em)
-  set par(leading: 0.65em, justify: true, first-line-indent: 0.2in)
+  show par: set block(spacing: 1.30em)
+  set par(leading: 1.30em, justify: true, first-line-indent: 0.2in)
 
   // Heading Rules
   // These are pretty complicated due to AIAA's strange formatting
@@ -81,7 +81,7 @@
   set quote(block: true, quotes: false)
   show quote: set pad(left: 0.4in, right: 0.25in, top: -0.5em)
   show quote: set text(size: 9pt)
-  show quote: set par(justify: true)
+  show quote: set par(justify: true)  
 
   // Figure Formatting Rules
   set figure(numbering: "1  ")
@@ -91,7 +91,7 @@
   show regex("Figure$"): "Fig."
 
   // Equation numbering
-  set math.equation(numbering: "1")
+  set math.equation(numbering: "(1)")
   show ref: it => {
   if it.element != none and it.element.func() == math.equation {
     // Override equation references.

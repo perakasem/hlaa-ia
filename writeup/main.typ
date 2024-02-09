@@ -1,7 +1,8 @@
 #import "aiaa_template.typ": *
+#import "@preview/tablex:0.0.8": *
 
 #show: aiaa_template.with(
-  title: "Efficiency Evaluation of Numerical Methods for Approximating Second Order Ordinary Differential Equations.",
+  title: "Efficiency Evaluation of Numerical Methods for 2nd-order ODEs.",
   authors: (
     (
       name: "JQX051",
@@ -21,7 +22,7 @@ In writing an extended essay on airfoil efficiency optimization, I used a comput
 
 = Numerical Methods
 
-Three approaches to approximating second order ODEs will be evaluated. Namely, the Runge-Kutta midpoint (RK2) method, the multistep predictor-corrector (P-C) method, and the backward Euler method. These methods provide varying approaches to computing solutions differential equations, as will be detailed, which enables the effective comparison of efficiency. 
+Three approaches to approximating second order ODEs will be evaluated. Namely, the Runge-Kutta midpoint (RK2) method, the multistep predictor-corrector (P-C) method, and the backward Euler method. These methods provide varying approaches for computing solutions to differential equations, as will be detailed, which enables effective efficency comparisons.
 
 In describing each method, the second-order ODE describing the simple harmonic motion of a mass-pendulum system,
 
@@ -32,13 +33,26 @@ will be used for sample calculations. For all methods, the equation must be deco
 $ (dif x)/(dif t) &= v \ 
   (dif^2 x)/(dif t^2) &= (dif v)/(dif t) = -omega^2x $
 
-The samples will consider the initial conditions $omega = sqrt(10)$, $x_0 = 1$, $v_0 = 0$, and $h = 0.01$ where $omega$ is the angular frequency of the system, $x_0$ is the initial displacement of the mass from equilibrium, $v_0$ is the initial velocity of the mass, and $h$ is the iterative step size.
+The samples calculations will consider the initial conditions $omega = sqrt(10)$, $x_0 = 1$, $v_0 = 0$, and $h = 0.01$ where $omega$ is the angular frequency of the system, $x_0$ is the initial displacement of the mass from equilibrium, $v_0$ is the initial velocity of the mass, and $h$ is the iterative step size.
 
 #linebreak()
 
 == Runge-Kutta Midpoint (RK2) Method 
 
-The Runge-Kutta Midpoint (RK2) method is a numerical method for computing 2nd order ODEs based on the higher order RK4 method. In essence, RK2 operates similar to the Euler method, but introduces a half step (midpoint) between iterations to improve the accuracy of the approximations. To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, the derivative $k$ of the initial point is used to calculate values at midpoint $m$:
+The Runge-Kutta Midpoint (RK2) method is a numerical method for computing 2nd order ODEs based on the higher order RK4 method. RK2 works similar to the Euler method, but introduces a half step (midpoint) between iterations to improve the accuracy of the approximations, shown in @midpoint.
+
+#linebreak()
+
+#figure(
+  image(
+    "assets/midpoint.png", 
+    height: 17%),
+  caption: "RK2 Method"
+)<midpoint>
+
+#linebreak()
+
+ To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, the derivative $k$ of the initial point is used to calculate values at midpoint $m$:
 
 $ k 1_v &= -omega^2x_n \
 k 1_x &= v_n \
@@ -46,7 +60,7 @@ m_v &= v_n + 1/2h times k 1_v \
 m_x &= x_n + 1/2h times k 1_x.
 $
 
-The midpoint values are then used to evaluate the final values:
+The slopes at the midpoint are then used to calculate the final values:
 
 $ k 2_v &= -omega^2m_x \
 k 2_x &= m_v \
@@ -76,7 +90,7 @@ To predict the motion of the pendulum system over time, these final values are u
 
 == Multistep Predictor-Corrector Method (P-C)
 
-The predictor-corrector (P-C) method is a multistep explicit method involving a predictor step, in which the values are predicted using the Euler method, then anjusted in the corrector step using the Adams-Bashforth Method. To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, the Euler method is applied to predict $v$ and $y$ at time $t_n+1$:
+The predictor-corrector (P-C) method is a multistep explicit method involving a predictor step, in which the values are predicted using the Euler method, then anjusted in the corrector step using the Adams-Bashforth Method. To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, the Euler method is applied to predict $v$ and $y$ at time $t_(n+1)$:
 
 $ v_("prediction") &= v_n + h times -omega^2x_n \
 x_("prediction") &= x_n + h times v_n.
@@ -139,33 +153,67 @@ $
 
 Although this method only involves 2 fundamental calculations per iteration, there is no definite number of operations involved due to the numerical solving step which involves external libraries and its dependency on the complexity of the equations themselves. 
 
+#pagebreak()
 
-= Complexity Optimization
+= Complexity Evaluation
 
-The complexity of each numerical method can be quantified by measuring their runtimes. Each method was applied to approximate three practical equations over 10 trials: The equation of motion of a simple harmonic oscillator, 
+The worst-case time complexity of each numerical method can be represented using the Big O notation by dissecting each operation #footnote[The Backward Euler method cannot be evaluated due to its dependency on external modules for computing systems of equations.]. 
+
+The complexity of each numerical method can be quantified by measuring their runtimes. Each method was applied to approximate three practical equations over 100 trials: The equation of motion of a simple harmonic oscillator (TC1), 
 
 $ (dif^2 x)/(dif t^2) = -omega^2x, \ 
 $
 
-the equation of motion of a damped harmonic oscillator,
+the equation of motion of a damped harmonic oscillator (TC2),
 
 $ (dif^2 x)/(dif t^2) + b (dif x)/(dif t) + k x = 0, $
 
-and the Van der Pol oscillator equation, 
+and the Van der Pol oscillator equation (TC3), 
 
 $ (dif^2 x)/(dif t^2) - mu(1-x^2)(dif x)/(dif t) + x = 0. $
 
-- present data (complete)
-- unfortunately, I am still figuring out how to attach media properly to this PDF. I will attach stuff separately to classroom so you can get an idea of what i'm working with. 
-- backward euler is extremely sluggish (due to numeric sys. eq. solving)
-- two other methods are faster for some eq. than others
-- rk2 fastest overall
 
-- present averages + bar graph comparison
-- avg overall time for each method
+Each test case was configured with the same step size, initial conditions, and number of iterations#footnote[Test scripts and initial conditions are in the appendix.]. As seen in @runtimecharts, the RK2 method is the overall fastest, followed by the P-C method, then the Backward Euler method which has a consistently greater average runtime. The discrepancy can be attributed to the numeric solver `fsolve` for evaluating systems of equations within each step. 
+
+#linebreak()
+
+#figure(
+  kind: table,
+  tablex(
+    columns:4,
+    rows:4,
+    align: center,
+    auto-lines: false,
+    [*Test Case*], [*Backwards Euler*], [*P-C*], [*RK2*],
+    hlinex(), 
+    [*TC1*], [0.047272074], [0.009758432], [0.003964148],
+    [*TC2*], [0.04873435], [0.002453182], [0.001983919],
+    [*TC3*], [0.054947517], [0.003014982], [0.002310078]
+  ),
+  caption: [Average Runtime / s #footnote[Raw data is in the appendix.]]
+)<runtimetable>
 
 
-= Accuracy Optimization
+#figure(
+caption: [Runtime Charts],
+grid(
+  columns: 2,
+  column-gutter: 20pt,
+    image(
+      "assets/methodruntimes.png", 
+      height: 28%),
+    image(
+      "assets/avgruntime.png", 
+      height: 28%)
+)
+)<runtimecharts>
+
+Test-case specific results reveal that P-C and RK2 share similar runtimes, with an anomaly in TC1 where the P-C method struggled. The relative runtime distribution between test cases using the Backward Euler method do not align with those of P-C—the increase in runtime between test cases occurs due to the increasing complexity the test cases, which requires the intense computation of the systems of equations. 
+
+Dissecting the 
+
+
+= Accuracy Evaluation
 
 - for SHM and damped equations: plot against analytical solution
 - plot absolute error 
@@ -187,7 +235,7 @@ results:
 
 - visual comparison of graphs (global)
 
-= Evaluation
+= Efficiency Evaluation
 
 RK2 is the best overall
 
@@ -214,5 +262,6 @@ See the full source code at https://github.com/perakasem/hlaa-ia
 
 - contains code for each numerical method: will be added to appendix for final submission. 
 
+= Conclusion
 
-#bibliography(full: true, "bib.yml")
+#bibliography(full: true, "bib.bib")
