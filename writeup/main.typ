@@ -18,11 +18,11 @@
 // your own content!
 
 = Introduction
-In writing an extended essay on airfoil efficiency optimization, I used a computational fluid dynamics solver (CFD) to approximate forces exerted on rigid bodies by fluids. Fundamentally, the program solved ordinary and partial differential equations of varying orders among other intermediary processes. Each iteration required considerable computational capacity and time, and thus, finding the most efficient numerical method for solving ordinary differential equations (ODEs) would allow processes like CFD solving to be optimized. The efficiency of a method, as defined for this exploration, is maximized when complexity—measured through runtime—is minimized, while the accuracy of the results is maximized. 
+In writing an extended essay on airfoil efficiency optimization, I used a computational fluid dynamics solver (CFD) to approximate forces exerted on rigid bodies by fluids. Fundamentally, the program solved ordinary and partial differential equations of varying orders among other intermediary processes. Each iteration required considerable computational capacity and time, and thus, finding the most efficient numerical method for solving ordinary differential equations (ODEs) would allow processes like CFD solving to be optimized. The efficiency of a method, as defined for this exploration, is maximized when complexity—measured through experimental runtime—is minimized. Efficiency metrics evaluated in this exploration include convergence rate,  runtime-discretization ranges, and runtime-error ratios. 
 
 = Numerical Methods
 
-Three approaches to approximating second order ODEs will be evaluated. Namely, the Runge-Kutta midpoint (RK2) method, the multistep predictor-corrector (P-C) method, and the backward Euler method. These methods provide varying approaches for computing solutions to differential equations, as will be detailed, which enables effective efficency comparisons.
+Three ground-level approaches to approximating second order ODEs will be evaluated. Namely, the Euler method, the Runge-Kutta midpoint (RK2) method, and the multistep predictor-corrector (P-C) method. These methods provide varying approaches for computing solutions to differential equations, as will be detailed, which enables effective efficency comparisons.
 
 In describing each method, the second-order ODE describing the simple harmonic motion of a mass-pendulum system,
 
@@ -37,9 +37,27 @@ The samples calculations will consider the initial conditions $omega = sqrt(10)$
 
 #linebreak()
 
+== Euler Method
+
+The Euler method is an explicit method that uses the slope at the point to approximate the function's value at the next point. To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, the following equations are forumlated:
+
+$ v_(n+1) &= v_n + h times -omega^2x_n \
+x_(n+1) &= x_n + h times v_n.
+$
+
+Given the prescribed initial conditions, the ODE can be approximated with the backward Euler method as follows:
+
+$ v_(n+1) &= 0 + 0.01 times -10 = -0.1 \ 
+x_(n+1) &= 1 + 0.01 times 0 = 1.
+$
+
+To predict the motion of the pendulum system over time, these final values are used to approximate the next iteration. The RK2 method involves 2 main calculations per iteration for 2nd order ODEs, and thus, the number of operations is proportional to the number of iterations. 
+
+#linebreak()
+
 == Runge-Kutta Midpoint (RK2) Method 
 
-The Runge-Kutta Midpoint (RK2) method is a numerical method for computing 2nd order ODEs based on the higher order RK4 method. RK2 works similar to the Euler method, but introduces a half step (midpoint) between iterations to improve the accuracy of the approximations, shown in @midpoint.
+The Runge-Kutta Midpoint (RK2) method is a numerical method for computing 2nd order ODEs based on the higher order RK4 method. RK2 works similar to the Euler method, but introduces a half step (midpoint) between iterations to improve the accuracy of the approximations, as illustrated in @midpoint.
 
 #linebreak()
 
@@ -84,7 +102,7 @@ x_(n+1) &= 1 + 0.01 times (-0.05) = 0.9995 \
 v_(n+1) &= 0 + 0.01 times (-10) = -0.1.
 $
 
-To predict the motion of the pendulum system over time, these final values are used to approximate the next iteration. The RK2 method involves 8 main calculations per iteration for 2nd order ODEs, and thus, the number of operations is proportional to the number of iterations. 
+The RK2 method involves 8 main calculations per iteration for 2nd order ODEs, and thus, the number of operations is proportional to the number of iterations. 
 
 #linebreak()
 
@@ -127,35 +145,15 @@ $
 
 As with RK2, to predict the motion of the pendulum system over time, these final values are used to approximate the next iteration. The P-C method involves 4 main calculations per iteration for 2nd order ODEs. 
 
-#linebreak()
-
-== Backward Euler Method
-
-The backward Euler method is an implicit method that uses the unknown slope at the next point to approximate the function's value at that point. To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, implicit equations are forumlated:
-
-$ x_(n+1) &= x_n + h times v_(n+1) \ 
-v_(n+1) &= v_n + h times (-omega^2x_(n+1)).
-$
-
-The system of equations is then solved. Although the system of equations is simple in this example, the potential nonlinearity of equations in more complex systems requires the use of numeric solvers, as will be implemented in the test scripts. 
-
-Given the prescribed initial conditions, the ODE can be approximated with the backward Euler method as follows:
-
-$ x_(n+1) &= 1 + 0.01 times v_(n+1) \ 
-v_(n+1) &= 0 - 0.01 times 10 times x_(n+1).
-$
-
-Using the numeric solver `fsolve` from the `scipy.optimize` Python module yields the following results:
-
-$ x_(n+1) &= 0.9990 \ 
-v_(n+1) &= -0.0999.
-$
-
-Although this method only involves 2 fundamental calculations per iteration, there is no definite number of operations involved due to the numerical solving step which involves external libraries and its dependency on the complexity of the equations themselves. 
-
 #pagebreak()
 
-= Complexity Evaluation
+= Efficiency Evaluation
+
+== Convergence Rate
+
+== Complexity Range
+
+== Runtime-Error
 
 The worst-case time complexity of each numerical method can be represented using the Big O notation by dissecting each operation #footnote[The Backward Euler method cannot be evaluated due to its dependency on external modules for computing systems of equations.]. 
 
@@ -164,53 +162,13 @@ The complexity of each numerical method can be quantified by measuring their run
 $ (dif^2 x)/(dif t^2) = -omega^2x, \ 
 $
 
-the equation of motion of a damped harmonic oscillator (TC2),
+and the equation of motion of a damped harmonic oscillator (TC2),
 
-$ (dif^2 x)/(dif t^2) + b (dif x)/(dif t) + k x = 0, $
-
-and the Van der Pol oscillator equation (TC3), 
-
-$ (dif^2 x)/(dif t^2) - mu(1-x^2)(dif x)/(dif t) + x = 0. $
+$ (dif^2 x)/(dif t^2) + b (dif x)/(dif t) + k x = 0. $
 
 
-Each test case was configured with the same step size, initial conditions, and number of iterations#footnote[Test scripts and initial conditions are in the appendix.]. As seen in @runtimecharts, the RK2 method is the overall fastest, followed by the P-C method, then the Backward Euler method which has a consistently greater average runtime. The discrepancy can be attributed to the numeric solver `fsolve` for evaluating systems of equations within each step. 
+Each test case was configured with the same step size, initial conditions, and number of iterations#footnote[Test scripts and initial conditions are in the appendix.].
 
-#linebreak()
-
-#figure(
-  kind: table,
-  tablex(
-    columns:4,
-    rows:4,
-    align: center,
-    auto-lines: false,
-    [*Test Case*], [*Backwards Euler*], [*P-C*], [*RK2*],
-    hlinex(), 
-    [*TC1*], [0.047272074], [0.009758432], [0.003964148],
-    [*TC2*], [0.04873435], [0.002453182], [0.001983919],
-    [*TC3*], [0.054947517], [0.003014982], [0.002310078]
-  ),
-  caption: [Average Runtime / s #footnote[Raw data is in the appendix.]]
-)<runtimetable>
-
-
-#figure(
-caption: [Runtime Charts],
-grid(
-  columns: 2,
-  column-gutter: 20pt,
-    image(
-      "assets/methodruntimes.png", 
-      height: 28%),
-    image(
-      "assets/avgruntime.png", 
-      height: 28%)
-)
-)<runtimecharts>
-
-Test-case specific results reveal that P-C and RK2 share similar runtimes, with an anomaly in TC1 where the P-C method struggled. The relative runtime distribution between test cases using the Backward Euler method do not align with those of P-C—the increase in runtime between test cases occurs due to the increasing complexity the test cases, which requires the intense computation of the systems of equations. 
-
-Dissecting the 
 
 
 = Accuracy Evaluation

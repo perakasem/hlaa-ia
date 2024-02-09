@@ -45,7 +45,8 @@ v0 = 0  # Initial velocity
 # Time parameters
 t0 = 0
 tf = 40
-h = 0.01  # Step size
+n = 0
+h = 1/2**n  # Step size
 N = int((tf - t0) / h)
 
 # Arrays for storing values

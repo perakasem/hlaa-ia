@@ -2,15 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import fsolve
 
-def f(t, y, omega):
+def f(y, omega):
     return -omega**2 * y
 
-def backward_euler_step(t, y, v, h, omega):
-    def equations(next_vars):
-        y_next, v_next = next_vars
-        return [y_next - y - h * v_next, v_next - v - h * f(t + h, y_next, omega)]
+def euler_step(y, v, h, omega):
+    v_next = v + h * f(y, omega)
+    y_next = y + h * v
 
-    y_next, v_next = fsolve(equations, [y, v])
     return y_next, v_next
 
 def analytical_solution(t, y0, v0, omega):
@@ -38,9 +36,9 @@ errors = []
 y = y0
 v = v0
 
-# Backward Euler Method
+# Euler Method
 for t in t_values:
-    y, v = backward_euler_step(t, y, v, h, omega)
+    y, v = euler_step(y, v, h, omega)
     y_values.append(y)
     v_values.append(v)
 
