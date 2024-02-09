@@ -2,17 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-def f(t, y, v, b, k):
-    return -b * v - k * y
+def f(t, y, v, mu):
+    return mu * (1 - y**2) * v - y
 
-def predictor_corrector_step(t, y, v, v_prev, h, b, k):
+
+def predictor_corrector_step(t, y, v, v_prev, h, b):
     # Predictor (Euler method)
-    v_predict = v + h * f(t, y, v, b, k)
+    v_predict = v + h * f(t, y, v, b)
     y_predict = y + h * v
 
     # Corrector (Adams-Bashforth method)
     if v_prev is not None:
-        v_correct = v + h * (1.5 * f(t + h, y_predict, v_predict, b, k) - 0.5 * f(t, y, v_prev, b, k))
+        v_correct = v + h * (1.5 * f(t + h, y_predict, v_predict, b) - 0.5 * f(t, y, v_prev, b))
     else:
         # For the first step, fall back to Euler method as we don't have v_prev
         v_correct = v_predict
@@ -21,11 +22,10 @@ def predictor_corrector_step(t, y, v, v_prev, h, b, k):
     return y_correct, v_correct, v_predict
 
 # Damping and stiffness parameters
-b = 0.5  # Damping coefficient
-k = 0.1  # Stiffness coefficient
+b = 3  # Damping coefficient
 
 # Initial conditions
-y0 = 1  # Initial position
+y0 = 0.1  # Initial position
 v0 = 0  # Initial velocity
 
 # Time parameters
@@ -45,16 +45,17 @@ errors = []
 y = y0
 v = v0
 
-for i in range(10):
-    # Predictor-Corrector Method
+# Predictor-Corrector Method
+
+# Main loop
+for i in range(100):
     start_time = time.time()
-    # Main loop
     v_prev = None
     for t in t_values:
-        y, v, v_predict = predictor_corrector_step(t, y, v, v_prev, h, b, k)
+        y, v, v_predict = predictor_corrector_step(t, y, v, v_prev, h, b)
         y_values.append(y)
         v_values.append(v)
 
         v_prev = v  # Update v_prev  for the next iteration
-    
+
     print((time.time() - start_time))

@@ -33,7 +33,7 @@ errors = []
 y = y0
 v = v0
 
-for i in range(10):
+for i in range(100):
     start_time = time.time()
     for t in t_values:
         y, v = rk_midpoint_step(t, y, v, h, omega)

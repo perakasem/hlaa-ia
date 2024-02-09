@@ -57,7 +57,7 @@ y = y0
 v = v0
 v_prev = None
 
-for i in range(10):
+for i in range(100):
     # Predictor-Corrector Method
     start_time = time.time()
 

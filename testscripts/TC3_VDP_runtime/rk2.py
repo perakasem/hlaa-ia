@@ -1,18 +1,24 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import time
-from scipy.optimize import fsolve
 
 def f(t, y, v, mu):
     return mu * (1 - y**2) * v - y
 
-def backward_euler_step(t, y, v, h, b):
-    # Function to represent the system of equations for Backward Euler
-    def equations(next_vars):
-        y_next, v_next = next_vars
-        return [y_next - y - h * v_next, v_next - v - h * f(t + h, y_next, v_next, b)]
 
-    # Solve for the next values of y and v
-    y_next, v_next = fsolve(equations, [y, v])
+def rk_midpoint_step(t, y, v, h, b):
+    # Midpoint estimates for y and v
+    k1_v = f(t, y, v, b)
+    k1_y = v
+    midpoint_v = v + 0.5 * h * k1_v
+    midpoint_y = y + 0.5 * h * k1_y
+
+    # Final update using midpoint estimates
+    k2_v = f(t + 0.5 * h, midpoint_y, midpoint_v, b)
+    k2_y = midpoint_v
+    y_next = y + h * k2_y
+    v_next = v + h * k2_v
+
     return y_next, v_next
 
 # Damping and stiffness parameters
@@ -39,12 +45,11 @@ errors = []
 y = y0
 v = v0
 
-for i in range(10):
-    # Backward Euler Method
+# RK2 Midpoint Method
+for i in range(100):
     start_time = time.time()
     for t in t_values:
-        y, v = backward_euler_step(t, y, v, h, b)
+        y, v = rk_midpoint_step(t, y, v, h, b)
         y_values.append(y)
         v_values.append(v)
-
     print((time.time() - start_time))
