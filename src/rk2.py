@@ -11,7 +11,7 @@ def rk_midpoint_step(t, y, v, h, omega):
     midpoint_v = v + 0.5 * h * k1_v
     midpoint_y = y + 0.5 * h * k1_y
     k2_v = f(t + 0.5 * h, midpoint_y, omega)
-    k2_y = midpot_v
+    k2_y = midpoint_v
     y_next = y + h * k2_y
     v_next = v + h * k2_v
     return y_next, v_next

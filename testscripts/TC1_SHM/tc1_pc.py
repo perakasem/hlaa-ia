@@ -24,11 +24,6 @@ def analytical_solution(t, y0, v0, omega):
     B = v0 / omega
     return A * np.cos(omega * t) + B * np.sin(omega * t)
 
-
-# Damping and stiffness parameters
-b = 0.5  # Damping coefficient
-k = 10  # Stiffness coefficient
-
 # Initial conditions
 y0 = 1  # Initial position
 v0 = 0  # Initial velocity

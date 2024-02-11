@@ -1,17 +1,14 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import time
 
-# Damped SHM
+# SHM
 class IVP1: # SHM
-    def __init__(self, omega, y0, v0, t0, tf, rmsef, maxrele) -> None:
+    def __init__(self, omega, y0, v0, t0, tf, rmsef) -> None:
         self.omega = omega # Angular frequency
         self.y0 = y0 # Initial position
         self.v0 = v0 # Initial velocity
         self.t0 = t0 # Initial time
         self.tf = tf # Final time
         self.rmsef = rmsef # Target L2 norm
-        self.maxrele = maxrele # Target maximum relative error
 
     def function(self, y, omega):
         return -omega**2 * y
@@ -23,7 +20,7 @@ class IVP1: # SHM
 
 # Damped SHM
 class IVP2:
-    def __init__(self, b, k, y0, v0, t0, tf, rmsef, maxrele) -> None:
+    def __init__(self, b, k, y0, v0, t0, tf, rmsef) -> None:
         self.b = b # Damping coefficient
         self.k = k # Stiffness coefficient
         self.y0 = y0 # Initial position
@@ -31,7 +28,6 @@ class IVP2:
         self.t0 = t0 # Initial time
         self.tf = tf # Final time
         self.rmsef = rmsef # Target L2 norm
-        self.maxrele = maxrele # Target maximum relative error
 
     def function(self, y, v, b, k):
         return -b * v - k * y
@@ -51,5 +47,5 @@ class IVP2:
             B = (v0 - alpha * y0) / omega
             return np.exp(alpha * t) * (A * np.cos(omega * t) + B * np.sin(omega * t))
 
-TC1 = IVP1(np.sqrt(10), 1, 0, 0, 40, 0.3, 0.01)
-TC2 = IVP2(0.5, 0.1, 1, 0, 0, 40, 0.3, 0.01)
+IVP1TC1 = IVP1(np.sqrt(10), 1, 0, 0, 40, 0.3)
+IVP2TC1 = IVP2(0.5, 0.1, 1, 0, 0, 40, 0.3)

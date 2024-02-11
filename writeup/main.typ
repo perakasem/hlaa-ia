@@ -2,7 +2,7 @@
 #import "@preview/tablex:0.0.8": *
 
 #show: aiaa_template.with(
-  title: "Efficiency Evaluation of Numerical Methods for 2nd-order ODEs.",
+  title: "Efficiency Evaluation of Forward Euler Method-Based Numerical Methods for Approximating 2nd-order Ordinary Differential Equations",
   authors: (
     (
       name: "JQX051",
@@ -18,7 +18,7 @@
 // your own content!
 
 = Introduction
-In writing an extended essay on airfoil efficiency optimization, I used a computational fluid dynamics solver (CFD) to approximate forces exerted on rigid bodies by fluids. Fundamentally, the program solved ordinary and partial differential equations of varying orders among other intermediary processes. Each iteration required considerable computational capacity and time, and thus, finding the most efficient numerical method for solving ordinary differential equations (ODEs) would allow processes like CFD solving to be optimized. The efficiency of a method, as defined for this exploration, is maximized when complexity—measured through experimental runtime—is minimized. Efficiency metrics evaluated in this exploration include convergence rate,  runtime-discretization ranges, and runtime-error ratios. 
+In writing an extended essay on airfoil efficiency optimization, I used a computational fluid dynamics solver (CFD) to approximate forces exerted on rigid bodies by fluids. Fundamentally, the program solved ordinary and partial differential equations of varying orders among other intermediary processes. Each iteration required considerable computational capacity and time, and thus, finding the most efficient numerical method for solving ordinary differential equations (ODEs) would allow processes like CFD solving to be optimized. The efficiency of a method, as defined for this exploration, is maximized when complexity—measured through the number of operations runtime—is minimized. Efficiency metrics evaluated in this exploration include convergence rate,  runtime-discretization ranges, and runtime-error ratios. 
 
 = Numerical Methods
 
@@ -37,15 +37,15 @@ The samples calculations will consider the initial conditions $omega = sqrt(10)$
 
 #linebreak()
 
-== Euler Method
+== Forward Euler Method
 
-The Euler method is an explicit method that uses the slope at the point to approximate the function's value at the next point. To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, the following equations are forumlated:
+The forward Euler method is an explicit method that uses the slope at the point to approximate the function's value at the next point. To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, the following equations are forumlated:
 
 $ v_(n+1) &= v_n + h times -omega^2x_n \
 x_(n+1) &= x_n + h times v_n.
 $
 
-Given the prescribed initial conditions, the ODE can be approximated with the backward Euler method as follows:
+Given the prescribed initial conditions, the ODE can be approximated with the foreward Euler method as follows:
 
 $ v_(n+1) &= 0 + 0.01 times -10 = -0.1 \ 
 x_(n+1) &= 1 + 0.01 times 0 = 1.
@@ -57,7 +57,7 @@ To predict the motion of the pendulum system over time, these final values are u
 
 == Runge-Kutta Midpoint (RK2) Method 
 
-The Runge-Kutta Midpoint (RK2) method is a numerical method for computing 2nd order ODEs based on the higher order RK4 method. RK2 works similar to the Euler method, but introduces a half step (midpoint) between iterations to improve the accuracy of the approximations, as illustrated in @midpoint.
+The Runge-Kutta Midpoint (RK2) method is a numerical method for computing 2nd order ODEs based on the higher order RK4 method. RK2 adopts a similar approach to the foreward Euler method, but introduces a half step (midpoint) between iterations to improve the accuracy of the approximations, as illustrated in @midpoint.
 
 #linebreak()
 
@@ -108,7 +108,7 @@ The RK2 method involves 8 main calculations per iteration for 2nd order ODEs, an
 
 == Multistep Predictor-Corrector Method (P-C)
 
-The predictor-corrector (P-C) method is a multistep explicit method involving a predictor step, in which the values are predicted using the Euler method, then anjusted in the corrector step using the Adams-Bashforth Method. To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, the Euler method is applied to predict $v$ and $y$ at time $t_(n+1)$:
+The predictor-corrector (P-C) method is a multistep explicit method involving a predictor step, in which the values are predicted using the foreward Euler method, then adjusted in the corrector step using the Adams-Bashforth Method. To find $x_(n+1)$ and $v_(n+1)$ at time $t_(n+1) = t_n + h$, the foreward Euler method is applied to predict $v$ and $y$ at time $t_(n+1)$:
 
 $ v_("prediction") &= v_n + h times -omega^2x_n \
 x_("prediction") &= x_n + h times v_n.
@@ -120,7 +120,7 @@ $ v_("corrected") &= v_("prediction"). $
 
 Otherwise, for later iterations where a previous $v$ value is available, 
 
-$ v_("corrected") &= v_n + h(3/2(-omega^2x_n) - 1/2(-omega^2x_(n-1))). $
+$ v_("corrected") &= v_n + h(3/2(-omega^2x_n) - 1/2(-omega^2x_(n-1))). $<corrector>
 
 In both cases, $x_("corrected")$ is calculated as
 
@@ -143,32 +143,118 @@ $ v_(n+1) &= -0.1 " (since it is the first step)" \
 x_(n+1) &= 1 + 0.01/2 ( 0 - 0.1) = 0.9995.
 $
 
-As with RK2, to predict the motion of the pendulum system over time, these final values are used to approximate the next iteration. The P-C method involves 4 main calculations per iteration for 2nd order ODEs. 
+To predict the motion of the pendulum system over time, these final values are used to approximate the next iteration following @corrector. The P-C method involves 4 main calculations per iteration for 2nd order ODEs. 
 
 #pagebreak()
 
 = Efficiency Evaluation
 
-== Convergence Rate
-
-== Complexity Range
-
-== Runtime-Error
-
-The worst-case time complexity of each numerical method can be represented using the Big O notation by dissecting each operation #footnote[The Backward Euler method cannot be evaluated due to its dependency on external modules for computing systems of equations.]. 
-
-The complexity of each numerical method can be quantified by measuring their runtimes. Each method was applied to approximate three practical equations over 100 trials: The equation of motion of a simple harmonic oscillator (TC1), 
+The efficiency of each numerical method can be quantified by via computational metrics such as its convergence rate, its number of operations, optimal discretization ranges, and operation to error ratios. To evaluate each metric, each numerical method was applied to approximate two real-world initial value problems (IVP): The equation of motion of a simple harmonic oscillator (IVP1), 
 
 $ (dif^2 x)/(dif t^2) = -omega^2x, \ 
 $
 
-and the equation of motion of a damped harmonic oscillator (TC2),
+and the equation of motion of a damped harmonic oscillator (IVP2),
 
 $ (dif^2 x)/(dif t^2) + b (dif x)/(dif t) + k x = 0. $
 
 
-Each test case was configured with the same step size, initial conditions, and number of iterations#footnote[Test scripts and initial conditions are in the appendix.].
+These 2nd order IVPs were selected for their linearity and homogeneity, allowing analytical solutions to be derived #footnote[Test scripts and initial conditions are in the appendix.].
 
+== Convergence Rate
+
+The convergence rate of a method is defined by its rate of reduction in error with respect its step size $h$. A suitable error metric for examining convergence is the root-mean-square-error (RMSE). The metric uses the same scale as the target variable, enabling a maximum absolute error threshold to be defined—a crucial consideration for computing physical quantities. RMSE quantifies the deviation between analytical and numerical solutions. Thus, to calculate it, analytical solutions are derived for comparison, with the first (IVP1) using the standard second-order homogeneous ODE form: 
+
+$ (dif^2 x)/(dif t^2) &= -omega^2x \ 
+(dif^2 x)/(dif t^2) + omega^2x &= 0 $
+
+letting $x'' = r^2$, we have
+
+$ r^2 &= -omega^2\
+r &= plus.minus omega i.
+$
+
+Because $r$ has complex conjugate roots in the form of $alpha plus.minus beta i$, its general solution is in the form
+
+$ x(t) &= e^(alpha t)[C_1 cos(beta t) + C_2 sin(beta t)], \
+therefore x(t) &= C_1 cos(omega t) + C_2 sin(omega t).
+$ 
+
+Considering the simple harmonic motion initial conditions $v_0 = 0$ and $x_0 = 1$, when we let $x(0) = x_0$, the cosine term is $1$ and the sine term is $0$, therefore, $C_1 = x_0$. Likewise, given $display((dif x)/(dif t)(0) = v_0)$, 
+
+$ (dif x)/(dif t) &= -omega C_1 sin(omega t) + omega C_2 cos(omega t), \
+therefore v_0 &= -omega C_1 sin(0) + omega C_2 cos(0)\
+v_0 &= omega C_2\
+C_2 &= v_0/omega.
+$
+
+Thus, we arrive at the analytical solution
+
+#rect[
+$ x(t) &= x_0 cos(omega t) + v_0/omega sin(omega t).
+$
+]
+IVP2 is solved similarly using the standard second-order homogeneous ODE form:
+
+$ (dif^2 x)/(dif t^2) + b (dif x)/(dif t) + k x = 0. $
+
+letting $x'' = r^2$, we have
+
+$ r^2 + b r + k&= 0,\
+therefore r &= (-b plus.minus sqrt(b^2 - 4k))/2.
+$
+
+For $b^2 - 4k > 0$, the following generalization can be made for computation when $b$ and $k$ are known, based on the general solution form: 
+
+$ x(t) &= C_1 e^(r_1 t) + C_2 e^(r_2 t) \
+r_1 &= -b + sqrt(b^2 - 4k)\
+r_2 &= -b - sqrt(b^2 - 4k). $
+
+Applying the initial conditions $v_0 = 0$ and $x_0 = 1$, 
+
+$ 1 &= C_1+C_2 \
+0 &= C_1 r_1 + C_2 r_2, \
+therefore C_2 &= x_0 - C_1,\
+therefore C_1 &= (v_0 - r_2  x_0)/(r_2 - r_2).
+$
+
+Thus, 
+#rect[
+$ x(t) = (v_0 - r_2  x_0)/(r_2 - r_2) dot e^(-b + sqrt(b^2 - 4k) dot t) + (x_0 - (v_0 - r_2  x_0)/(r_2 - r_2)) dot e^(-b - sqrt(b^2 - 4k) dot t). $
+]
+For $b^2 - 4k < 0$, the general solution is in the form
+
+$ x(t) &= e^(alpha t)[C_1 cos(beta t) + C_2 sin(beta t)].
+$ 
+
+Applying the initial conditions $v_0 = 0$ and $x_0 = 1$, 
+
+$ 1 &= e^0 [ C_1 cos(0) + C_2 sin(0)] = C_1 
+$
+and
+
+$ (dif x)/(dif t) &= alpha e^(alpha t)[C_1 cos(beta t) + C_2 sin(beta t)] + e^(alpha t)[- beta C_1 sin(beta t) + beta C_2 cos(beta t)]\
+&= e^(alpha t)[(alpha C_1 - beta C_2) cos(beta t) + (alpha C_2 - beta C_1) sin(beta t)] \
+therefore 0 &= e^(0)[(alpha C_1 - beta C_2) cos(0) + (alpha C_2 - beta C_1) sin(0)] \
+0 &= alpha C_2 - beta C_1.
+$
+
+Since $x_0 = C_1$,
+
+$ C_2 &= (v_0 - alpha x_0)/beta \
+$
+
+Thus, given $alpha = display(-b/2)$ and $beta = display(sqrt(4k - b^2)/2)$ from the complex conjugate roots of $r$ in the form $alpha + beta i$,
+
+#rect[
+$ x(t) = e^(-1/2 b t)[x_0 cos(sqrt(4k - b^2)/2 dot t) + (2 v_0 + b x_0)/sqrt(4k - b^2) sin(sqrt(4k - b^2)/2 dot t)]. $
+]
+
+Using these analytical solutions, the 
+
+== Complexity Range
+
+== Runtime-Error
 
 
 = Accuracy Evaluation

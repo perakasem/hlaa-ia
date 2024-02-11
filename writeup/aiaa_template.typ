@@ -118,7 +118,7 @@
   
   // Title row.
   align(center)[
-    #block(below: 0.5in, text(weight: 700, size: 24pt, title))
+    #block(below: 0.5in, text(weight: 700, size: 20pt, title))
   ]
 
   // Author information, grouped by affiliation

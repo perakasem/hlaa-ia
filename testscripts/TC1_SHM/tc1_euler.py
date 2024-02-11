@@ -38,6 +38,7 @@ v = v0
 
 # Euler Method
 for t in t_values:
+    time = time.runtime
     y, v = euler_step(y, v, h, omega)
     y_values.append(y)
     v_values.append(v)
@@ -49,23 +50,3 @@ for t in t_values:
 # Calculate RMSE
 rmse = np.sqrt(np.mean(np.array(errors)**2))
 print("RMSE:", rmse)
-
-# Plotting the results and error
-plt.figure(figsize=(12, 8))
-plt.subplot(2, 1, 1)
-plt.plot(t_values, y_values, label='Backward Euler Solution')
-plt.plot(t_values, analytical_values, label='Analytical Solution', linestyle='dashed')
-plt.xlabel('Time')
-plt.ylabel('Position')
-plt.title('Comparison of Numerical and Analytical Solutions')
-plt.legend()
-
-plt.subplot(2, 1, 2)
-plt.plot(t_values, errors, label='Error')
-plt.xlabel('Time')
-plt.ylabel('Error')
-plt.title('Error Over Time')
-plt.legend()
-
-plt.tight_layout()
-plt.show()
