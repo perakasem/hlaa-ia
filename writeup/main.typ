@@ -215,12 +215,12 @@ Applying the initial conditions $v_0 = 0$ and $x_0 = 1$,
 $ 1 &= C_1+C_2 \
 0 &= C_1 r_1 + C_2 r_2, \
 therefore C_2 &= x_0 - C_1,\
-therefore C_1 &= (v_0 - r_2  x_0)/(r_2 - r_2).
+therefore C_1 &= (v_0 - r_2  x_0)/(r_1 - r_2).
 $
 
 Thus, 
 #rect[
-$ x(t) = (v_0 - r_2  x_0)/(r_2 - r_2) dot e^(-b + sqrt(b^2 - 4k) dot t) + (x_0 - (v_0 - r_2  x_0)/(r_2 - r_2)) dot e^(-b - sqrt(b^2 - 4k) dot t). $<IVP21>
+$ x(t) = (v_0 - r_2  x_0)/(r_1 - r_2) dot e^(-b + sqrt(b^2 - 4k) dot t) + (x_0 - (v_0 - r_2  x_0)/(r_1 - r_2)) dot e^(-b - sqrt(b^2 - 4k) dot t). $<IVP21>
 ]
 For $b^2 - 4k < 0$, the general solution is in the form
 
